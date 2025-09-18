@@ -1,0 +1,5 @@
+.env
+back/src/controllers/user.controller.ts
+back/src/routes/user.routes.ts
+back/src/config/database.ts
+node_modules
