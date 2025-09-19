@@ -2,18 +2,21 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-// Load environment variables
 dotenv.config();
 
-// MongoDB configuration using environment variables with fallback defaults
-const DB_NAME = process.env.DB_NAME || "mycontacts_db";
-const DB_USER = process.env.DB_USER || "";
-const DB_PASS = process.env.DB_PASS || "";
-const DB_HOST = process.env.DB_HOST || "localhost";
-const DB_PORT = process.env.DB_PORT || "27017";
-
-// Construct MongoDB connection string
 const getMongoURI = (): string => {
+    console.log("DB string :", process.env.DB_STRING);
+    const atlasConnection = process.env.DB_STRING;
+    if (atlasConnection) {
+        return atlasConnection;
+    }
+    
+    const DB_NAME = process.env.DB_NAME;
+    const DB_USER = process.env.DB_USER;
+    const DB_PASS = process.env.DB_PASS;
+    const DB_HOST = process.env.DB_HOST;
+    const DB_PORT = process.env.DB_PORT;
+
     if (DB_USER && DB_PASS) {
         return `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}`;
     } else {
@@ -21,13 +24,20 @@ const getMongoURI = (): string => {
     }
 };
 
-// Connect to MongoDB
+// Connecting DB
 export const connectDatabase = async (): Promise<void> => {
     try {
-        await mongoose.connect(getMongoURI());
-        console.log("Connected to MongoDB successfully");
+        const uri = getMongoURI();
+        console.log("Connecting to MongoDB...");
+        
+        await mongoose.connect(uri);
+        
+        console.log("Connected to MongoDB successfully!");
+        console.log(`Database: ${mongoose.connection.name}`);
+        console.log(`Host: ${mongoose.connection.host}`);
     } catch (error) {
         console.error("MongoDB connection error:", error);
+        console.log("Make sure MongoDB is running or check your connection string");
         process.exit(1);
     }
 };
