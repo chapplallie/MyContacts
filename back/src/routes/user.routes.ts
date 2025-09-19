@@ -16,7 +16,7 @@ export default class UserRoute {
         this.router.post('/signin', this.userController.signin);
 
         //Contacts
-        // this.router.get('/contacts', connectedUser, this.userController.getContacts);
+        this.router.get('/contacts', connectedUser, this.userController.getContacts);
         this.router.post('/contacts/add', connectedUser, this.userController.createContact);
         this.router.patch('/contacts/:contactId', connectedUser, this.userController.updateContact);
         // this.router.delete('/contacts/:id', connectedUser, this.userController.deleteContact);

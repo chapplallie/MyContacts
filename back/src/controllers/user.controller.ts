@@ -62,7 +62,7 @@ export default class UserController {
         res.status(201).send({ message: "Utilisateur créé avec succès" });
     }
 
-    //TODO 2 : createContact, getContacts, updateContact, deleteContact
+    //TODO 2 :  getContacts, deleteContact
     public async createContact(req: any, res: any, next: any) {
         const { firstname, lastname, phone } = req.body;
 
