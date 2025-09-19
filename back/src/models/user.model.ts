@@ -7,9 +7,6 @@ export interface UserModel extends Document {
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
-    createdBy?: mongoose.Types.ObjectId;
-    updatedBy?: mongoose.Types.ObjectId;
-    deletedBy?: mongoose.Types.ObjectId;
     validPassword(password: string): Promise<boolean>;
 }
 
@@ -33,21 +30,6 @@ const UserSchema = new Schema<UserModel>({
         type: Date,
         default: null
     },
-    createdBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        default: null
-    },
-    updatedBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        default: null
-    },
-    deletedBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        default: null
-    }
 }, {
     timestamps: true
 });
