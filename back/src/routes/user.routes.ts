@@ -1,5 +1,7 @@
+import { connect } from 'mongoose';
 import UserController from '../controllers/user.controller';
 import express from 'express';
+import connectedUser from '../middlewares/auth.middleware';
 
 export default class UserRoute {
         public router = express.Router();
@@ -17,12 +19,12 @@ export default class UserRoute {
 //TODO 1 : faire un middleware pour vérifier que l'utilisateur est connecté avant d'accéder aux routes contacts   
 
         //Contacts
-        // this.router.post('/contacts', this.connectedUser.userController.createContact);
-        // this.router.get('/contacts', this.connectedUser.userController.getContacts);
-        // this.router.patch('/contacts/:id', this.connectedUser.userController.updateContact);
-        // this.router.delete('/contacts/:id', this.connectedUser.userController.deleteContact);
+        // this.router.get('/contacts', connectedUser, this.userController.getContacts);
+        this.router.post('/contacts/add', connectedUser, this.userController.createContact);
+        // this.router.patch('/contacts/:id', connectedUser, this.userController.updateContact);
+        // this.router.delete('/contacts/:id', connectedUser, this.userController.deleteContact);
 
  //TODO 3 : penser a décommenter les routes contacts lol 
-       
+
     }
 }

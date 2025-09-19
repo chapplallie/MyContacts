@@ -1,4 +1,4 @@
-import { ContactModel } from "@/models/contact.model";
+import { ContactModel } from "../models/contact.model";
 import {UserModel} from "../models/user.model";
 
 export class Models {
