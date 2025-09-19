@@ -15,13 +15,10 @@ export default class UserRoute {
         this.router.post('/auth', this.userController.auth);
         this.router.post('/signin', this.userController.signin);
 
-
-//TODO 1 : faire un middleware pour vérifier que l'utilisateur est connecté avant d'accéder aux routes contacts   
-
         //Contacts
         // this.router.get('/contacts', connectedUser, this.userController.getContacts);
         this.router.post('/contacts/add', connectedUser, this.userController.createContact);
-        // this.router.patch('/contacts/:id', connectedUser, this.userController.updateContact);
+        this.router.patch('/contacts/:contactId', connectedUser, this.userController.updateContact);
         // this.router.delete('/contacts/:id', connectedUser, this.userController.deleteContact);
 
  //TODO 3 : penser a décommenter les routes contacts lol 

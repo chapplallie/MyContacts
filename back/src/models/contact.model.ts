@@ -39,16 +39,7 @@ const ContactSchema = new Schema<ContactModel>({
         ref: 'User',
         default: null
     },
-    updatedBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        default: null
-    },
-    deletedBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        default: null
-    }
+
 }, {
     timestamps: true
 });

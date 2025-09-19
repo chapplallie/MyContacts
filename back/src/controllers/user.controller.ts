@@ -71,21 +71,57 @@ export default class UserController {
             return;
         }
 
-        res.status(201).send({ message: "Contact created" });
-
-         if (!firstname || !lastname  || !phone) {
-            res.status(400).send({ message: "nom , prénom  et numéro requis" });
-            return;
-        }
-
         const existingContact = await ContactModel.findOne({ phone: phone });
         if (existingContact) {
             res.status(409).send({ message: "Contact déjà existant" });
             return;
         }
 
-        const newContact = new ContactModel({ firstname, lastname, phone });
+        const userId = req.user.id;
+        const newContact = new ContactModel({ firstname, lastname, phone, createdBy: userId });
         await newContact.save();
         res.status(201).send({ message: "Contact créé avec succès" });
+    }
+
+    public async getContacts(req: any, res: any, next: any) {
+        try {
+            const userId = req.user.id;
+            const contacts = await ContactModel.find({ createdBy: userId, deletedAt: null });
+            res.status(200).send(contacts);
+        } catch (error) {
+            res.status(500).send({ message: "Erreur lors de la récupération des contacts (erreur serveur)" });
+        }
+    }
+
+    //TODO 5 : renvoyer contact mis à jour direct (doc mongo ???)
+    public async updateContact(req: any, res: any, next: any) {
+        const contactId = req.params.contactId;
+
+        const { firstname, lastname, phone } = req.body;
+
+        if (!firstname && !lastname && !phone) {
+            res.status(400).send({ message: "Tous les champs sont requis" });
+            return;
+        }
+
+        const userId = req.user.id;
+        console.log("id contact:", contactId);
+        const currentContact = await ContactModel.findOne({ _id: contactId, createdBy: userId, deletedAt: null });
+        if (!currentContact) {
+            res.status(404).send({ message: "Contact non trouvé" });
+            return;
+        }
+
+        const updateData: any = { updatedBy: userId };
+        if (firstname && firstname !== currentContact.firstname) updateData.firstname = firstname;
+        if (lastname && lastname !== currentContact.lastname) updateData.lastname = lastname;
+        if (phone && phone !== currentContact.phone) updateData.phone = phone;
+
+        const updatedContact = await ContactModel.findOneAndUpdate(
+            { _id: contactId, createdBy: userId, deletedAt: null },
+            updateData
+        );
+
+        res.status(200).send({ message: "Contact mis à jour avec succès", contact: updatedContact });
     }
 }
