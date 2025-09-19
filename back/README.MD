@@ -1,4 +1,4 @@
-mongoose pour gerer mongodb
+# Disclaimer
 utilisation de typescript parce que c'est ce dont j'ai l'habitude
 j'ai utilisé l'ia pour comprendre comment il fallait brancher mongoDB parce que je n'ai jamais fait de base de données nosql (+ infos sur roadmap.sh + infos sur mongodb.com )
 
