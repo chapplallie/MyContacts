@@ -59,4 +59,6 @@ export default class UserController {
         await newUser.save();
         res.status(201).send({ message: "Utilisateur créé avec succès" });
     }
+
+    //TODO 2 : implémenter les méthodes createContact, getContacts, updateContact, deleteContact
 }
