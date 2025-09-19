@@ -3,7 +3,7 @@ import { UserModel } from "../models/user.model";
 import jwt from "jsonwebtoken";
 
 export default class UserController {
-    public async auth(req: any, res: any, next: any) {
+    public async auth(req: any, res: any) {
         const { email, password } = req.body;
 
         if (!email || !password) {
@@ -44,7 +44,7 @@ export default class UserController {
         }
     }
 
-    public async signin(req: any, res: any, next: any) { 
+    public async signin(req: any, res: any) { 
         const { email, password } = req.body;  
         if (!email || !password) {
             res.status(400).send({ message: "Email et MDP requis" });
@@ -62,8 +62,7 @@ export default class UserController {
         res.status(201).send({ message: "Utilisateur créé avec succès" });
     }
 
-    //TODO 2 :  getContacts, deleteContact
-    public async createContact(req: any, res: any, next: any) {
+    public async createContact(req: any, res: any) {
         const { firstname, lastname, phone } = req.body;
 
         if (!firstname || !lastname || !phone) {
@@ -83,7 +82,7 @@ export default class UserController {
         res.status(201).send({ message: "Contact créé avec succès" });
     }
 
-    public async getContacts(req: any, res: any, next: any) {
+    public async getContacts(req: any, res: any) {
         try {
             const userId = req.user.id;
             const contacts = await ContactModel.find({ createdBy: userId, deletedAt: null });
@@ -94,7 +93,7 @@ export default class UserController {
     }
 
     //TODO 5 : renvoyer contact mis à jour direct (doc mongo ???)
-    public async updateContact(req: any, res: any, next: any) {
+    public async updateContact(req: any, res: any) {
         const contactId = req.params.contactId;
 
         const { firstname, lastname, phone } = req.body;
@@ -123,5 +122,29 @@ export default class UserController {
         );
 
         res.status(200).send({ message: "Contact mis à jour avec succès", contact: updatedContact });
+    }
+
+    public async deleteContact(req: any, res: any) {
+        const contactId = req.params.contactId;
+        const userId = req.user.id;
+        console.log("id contact:", contactId);
+        const contact = await ContactModel.findOne({ _id: contactId, deletedAt: null });
+        console.log("contact:", contact);
+        if (!contact) {
+            res.status(404).send({ message: "Contact non trouvé" });
+            return;
+        }
+
+        if (!contact.createdBy || contact.createdBy.toString() !== userId) {
+            res.status(403).send({ message: "Ce contact ne vous appartient pas" });
+            return;
+        }
+
+        const deletedContact = await ContactModel.findOneAndUpdate(
+            { _id: contactId, createdBy: userId, deletedAt: null },
+            { deletedAt: new Date() }
+        );
+
+        res.status(200).send({ message: "Contact supprimé avec succès" });
     }
 }
