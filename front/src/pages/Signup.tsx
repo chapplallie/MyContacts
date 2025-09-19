@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form } from 'react-router-dom';
+import Form from '../components/form';
 
 const Signup: React.FC = () => {
   return (

@@ -24,7 +24,6 @@ function App() {
       <Routes>
         <Route path='/signup' element={<Signup />} />
         <Route path='/auth' element={<Auth />} />
-        {/* Add other routes as needed */}
       </Routes>
     </div>
   );
