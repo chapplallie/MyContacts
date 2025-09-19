@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDatabase } from './config/database';
 import UserRoute from './routes/user.routes';
+import { swaggerSpec, swaggerUi } from './swagger/swaggerConfig';
 
 dotenv.config();
 
@@ -28,6 +29,9 @@ app.get('/', (req, res) => {
 app.get('/health', (req, res) => {
     res.json({ status: 'OK', message: 'Server is healthy' });
 });
+
+//swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // User route
 app.use('/', userRoute.router);
