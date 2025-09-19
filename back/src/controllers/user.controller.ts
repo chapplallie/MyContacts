@@ -41,4 +41,22 @@ export default class UserController {
             res.status(404).send({ message: "User inconnu" });
         }
     }
+
+    public async signin(req: any, res: any, next: any) { 
+        const { email, password } = req.body;  
+        if (!email || !password) {
+            res.status(400).send({ message: "Email et MDP requis" });
+            return;
+        }
+
+        const existingUser = await UserModel.findOne({ email: email });
+        if (existingUser) {
+            res.status(409).send({ message: "Email déjà utilisé" });
+            return;
+        }
+        
+        const newUser = new UserModel({ email, password });
+        await newUser.save();
+        res.status(201).send({ message: "Utilisateur créé avec succès" });
+    }
 }

@@ -2,24 +2,25 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDatabase } from './config/database';
+import UserRoute from './routes/user.routes';
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Initialize routes
+const userRoute = new UserRoute();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Basic route
 app.get('/', (req, res) => {
     res.json({ 
-        message: 'MyContacts Backend API',
+        message: 'MyContacts API',
         status: 'Running',
-        timestamp: new Date().toISOString()
     });
 });
 
@@ -28,8 +29,8 @@ app.get('/health', (req, res) => {
     res.json({ status: 'OK', message: 'Server is healthy' });
 });
 
-// TODO: Add your routes here
-// app.use('/api/users', userRoutes);
+// User route
+app.use('/', userRoute.router);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -50,9 +51,8 @@ const startServer = async () => {
         
         // Start listening
         app.listen(PORT, () => {
-            console.log(`🚀 Server is running on port ${PORT}`);
-            console.log(`📱 API URL: http://localhost:${PORT}`);
-            console.log(`🔍 Health check: http://localhost:${PORT}/health`);
+            console.log(`Server is running on port ${PORT}`);
+            console.log(`API URL: http://localhost:${PORT}`);
         });
     } catch (error) {
         console.error('Failed to start server:', error);

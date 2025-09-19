@@ -1,4 +1,4 @@
-import UserController from '@/controllers/user.controller';
+import UserController from '../controllers/user.controller';
 import express from 'express';
 
 export default class UserRoute {
@@ -11,5 +11,6 @@ export default class UserRoute {
     public intializeRoutes() {
         //AUTH ici
         this.router.post('/auth', this.userController.auth);
+        this.router.post('/signin', this.userController.signin);
     }
 }

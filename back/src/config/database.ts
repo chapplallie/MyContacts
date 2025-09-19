@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const getMongoURI = (): string => {
-    console.log("DB string :", process.env.DB_STRING);
     const atlasConnection = process.env.DB_STRING;
     if (atlasConnection) {
         return atlasConnection;
@@ -34,13 +33,11 @@ export const connectDatabase = async (): Promise<void> => {
         
         console.log("Connected to MongoDB successfully!");
         console.log(`Database: ${mongoose.connection.name}`);
-        console.log(`Host: ${mongoose.connection.host}`);
+        
     } catch (error) {
         console.error("MongoDB connection error:", error);
         console.log("Make sure MongoDB is running or check your connection string");
         process.exit(1);
     }
 };
-
-// Export mongoose instance for use in models
 export const database = mongoose;

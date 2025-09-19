@@ -10,11 +10,6 @@ export interface ContactModel extends Document {
     createdBy?: mongoose.Types.ObjectId;
     updatedBy?: mongoose.Types.ObjectId;
     deletedBy?: mongoose.Types.ObjectId;
-    validPassword(password: string): Promise<boolean>;
-}
-
-export interface IContactModel extends mongoose.Model<ContactModel> {
-    generatePassword(length?: number): string;
 }
 
 const ContactSchema = new Schema<ContactModel>({
@@ -58,4 +53,4 @@ const ContactSchema = new Schema<ContactModel>({
     timestamps: true
 });
 
-export const ContactModel = mongoose.model<ContactModel, IContactModel>('Contact', ContactSchema);
+export const ContactModel = mongoose.model<ContactModel>('Contact', ContactSchema);
