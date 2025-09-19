@@ -9,7 +9,7 @@ export default class UserRoute {
         this.intializeRoutes();
     }
     public intializeRoutes() {
-        //AUTH
+        //AUTH ici
         this.router.post('/auth', this.userController.auth);
     }
 }

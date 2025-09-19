@@ -22,12 +22,12 @@ const ContactSchema = new Schema<ContactModel>({
         type: String,
         required: true,
         unique: true,
-        maxlength: 128
+        maxlength: 80
     },
     lastname: {
         type: String,
         required: true,
-        maxlength: 128
+        maxlength: 80
     },
     phone: {
         type: String,
