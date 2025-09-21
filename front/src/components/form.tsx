@@ -5,21 +5,19 @@ interface FormData {
     password: string;
 }
 
-const Form: React.FC = () => {
-    const [formData, setFormData] = useState<FormData>({ email: '', password: '' });
+interface FormProps {
+    onSubmit?: (data: FormData) => void;
+}
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
+const Form: React.FC<FormProps> = ({ onSubmit }) => {
+
+    const [formData, setFormData] = useState<FormData>({ email: '', password: '' });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        
-        console.log(formData);
+        if (onSubmit) {
+            onSubmit(formData);
+        }
     };
 
     return (
@@ -31,18 +29,17 @@ const Form: React.FC = () => {
                     id="email"
                     name="email"
                     value={formData.email}
-                    onChange={handleChange}
+             
                     required
                 />
             </div>
             <div>
-                <label htmlFor="password">Password:</label>
+                <label htmlFor="password">Mot de passe:</label>
                 <input
                     type="password"
                     id="password"
                     name="password"
                     value={formData.password}
-                    onChange={handleChange}
                     required
                 />
             </div>

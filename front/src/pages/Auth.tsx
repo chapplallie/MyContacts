@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useActionState } from 'react';
 import Form from '../components/form';
+import { createUser } from '../../actions/users';
 
 const Auth: React.FC = () => {
   return (
     <div>
-      <Form />
+      <Form onSubmit={createUser} />
     </div>
   );
 };
