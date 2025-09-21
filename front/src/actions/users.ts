@@ -1,5 +1,5 @@
 // @ts-ignore
-const API_URL = process.env.API_URL as string;
+const API_URL = process.env.REACT_APP_API_URL as string;
 
 export async function createUser(data:{email: string, password: string}) {
     const response = await fetch(`${API_URL}/signin`, {
@@ -9,8 +9,8 @@ export async function createUser(data:{email: string, password: string}) {
         },
         body: JSON.stringify(data),
     });
-
-  const dataToSend = await response.json();
+  const dataToSend = await response.json(); 
+   console.log("user created:", dataToSend);
   return dataToSend;
 }
 
@@ -24,5 +24,7 @@ export async function authentUser(data: { email: string, password: string}) {
     });
 
   const dataToSend = await response.json();
+  console.log("user authent:", dataToSend);
+
   return dataToSend;
 }
