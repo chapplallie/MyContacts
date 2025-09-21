@@ -1,4 +1,3 @@
-// @ts-ignore
 const API_URL = process.env.REACT_APP_API_URL as string;
 
 export async function createContact(data:{firstname: string, lastname: string, phone: string}) {
