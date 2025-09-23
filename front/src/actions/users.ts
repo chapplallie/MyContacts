@@ -10,8 +10,10 @@ export async function createUser(data:{email: string, password: string}) {
         body: JSON.stringify(data),
     });
   const dataToSend = await response.json(); 
-   console.log("user created:", dataToSend);
+  window.location.href = "/auth";
+  console.log("user created:", dataToSend);
   return dataToSend;
+
 }
 
 export async function authentUser(data: { email: string, password: string}) {
@@ -24,7 +26,8 @@ export async function authentUser(data: { email: string, password: string}) {
     });
 
   const dataToSend = await response.json();
-  console.log("user authent:", dataToSend);
-
+  console.log("user:", dataToSend);
+  console.log("userId:", dataToSend.userId);
+  window.location.href = `/${dataToSend.userId}`;
   return dataToSend;
 }

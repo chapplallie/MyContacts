@@ -4,6 +4,7 @@ import Button from './components/button';
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Signup from './pages/Signup';
 import Auth from './pages/Auth';
+import UserPage from './pages/[userId]/page';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
       <Routes>
         <Route path='/signup' element={<Signup />} />
         <Route path='/auth' element={<Auth />} />
+        <Route path="/:userId" element={<UserPage userEmail={''} />} />
       </Routes>
     </div>
   );
