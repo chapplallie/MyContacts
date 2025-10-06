@@ -18,9 +18,7 @@ export async function createUser(data:{email: string, password: string}) {
 }
 
 export async function authentUser(data: { email: string, password: string}) {
-    console.log("api url:", `${API_URL}/auth`);
 
-  //TODO 1: Bcrypt mdp avant envoie 
     const response = await fetch(`${API_URL}/auth`, {
         method: 'POST',
         headers: {

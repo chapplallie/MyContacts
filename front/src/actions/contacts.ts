@@ -15,9 +15,7 @@ export async function createContact(firstname: string, lastname: string, phone: 
         },
         body: JSON.stringify({ firstname, lastname, phone }),
     });
-    console.log("body", { firstname, lastname, phone });
   const dataToSend = await response.json();
-  console.log("dataToSend:", dataToSend);
   return dataToSend;
 }
 
@@ -26,8 +24,6 @@ export async function getContactsByUserId(userId: string) {
     if (!token) {
         throw new Error('Authentication required');
     }
-
-    console.log('Fetching contacts for userId:', userId);
 
     const response = await fetch(`${API_URL}/contacts`, {
         method: 'GET',
@@ -54,8 +50,6 @@ export async function getContactByContactId(contactId: string) {
             'Authorization': `Bearer ${token}`
         },
     });
-    console.log("Response :", response);
-
     const dataToSend = await response.json();
     return dataToSend;
 }

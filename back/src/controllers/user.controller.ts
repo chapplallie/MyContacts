@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 
 export default class UserController {
     public async auth(req: any, res: any) {
-        console.log("auth req.body:", req.body);
         const { email, password } = req.body;
 
         if (!email || !password) {
@@ -12,7 +11,6 @@ export default class UserController {
         }
         
         const user = await UserModel.findOne({ email: email });
-        console.log("user trouvé:", user);
         if (!user) {
             return res.status(404).send({ message: "User inconnu" });
         }
@@ -33,7 +31,6 @@ export default class UserController {
                 createdAt: user.createdAt,
                 updatedAt: user.updatedAt
             };
-            console.log('info du user à envoyer:', userToSend)
             return res
                 .set("Content-Type", "application/json; charset=utf-8")
                 .status(200)
@@ -125,7 +122,6 @@ export default class UserController {
         }
 
         const userId = req.user.id;
-        console.log("id contact:", contactId);
         const currentContact = await ContactModel.findOne({ _id: contactId, createdBy: userId, deletedAt: null });
         if (!currentContact) {
             res.status(404).send({ message: "Contact non trouvé" });
@@ -148,9 +144,7 @@ export default class UserController {
     public async deleteContact(req: any, res: any) {
         const contactId = req.params.contactId;
         const userId = req.user.id;
-        console.log("id contact:", contactId);
         const contact = await ContactModel.findOne({ _id: contactId, deletedAt: null });
-        console.log("contact:", contact);
         if (!contact) {
             res.status(404).send({ message: "Contact non trouvé" });
             return;

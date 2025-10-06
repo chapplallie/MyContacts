@@ -46,7 +46,6 @@ const TableContact: React.FC<TableContactProps> = ({ userId, dataContact = [] })
             fetchContacts();
         }
     }, [userId, navigate, dataContact]);
-console.log(contacts);
     return (
         <div className="w-full">
             <h2 className="text-xl font-bold mb-4">Contacts</h2>

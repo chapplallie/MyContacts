@@ -21,15 +21,12 @@ const EditContactPage: React.FC = () => {
                 throw new Error('Contact ID is required');
             }
             const data = await getContactByContactId(contactId);
-            console.log("Fetched contact data:", data);
             setContact({
                 _id: data._id,
                 firstname: data.firstname,
                 lastname: data.lastname,
                 phone: data.phone
-            });
-            console.log("Fetched contact data:", data);
-        
+            });        
         };
 
         if (contactId) {

@@ -2,7 +2,6 @@ import Form from '../components/form';
 import { authentUser } from '../actions/users';
 
 const Auth: React.FC = () => {
-  console.log("Auth render");
   return (
     <div>
       <Form onSubmit={authentUser} />
