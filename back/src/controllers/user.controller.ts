@@ -4,44 +4,44 @@ import jwt from "jsonwebtoken";
 
 export default class UserController {
     public async auth(req: any, res: any) {
+        console.log("auth req.body:", req.body);
         const { email, password } = req.body;
 
         if (!email || !password) {
-            res.status(400).send({ message: "Email et MDP requis" });
-            return;
+            return res.status(400).send({ message: "Email et MDP requis" });
         }
         
         const user = await UserModel.findOne({ email: email });
-        
-        if (user) {
-            if (await user.validPassword(password)) {
-                //JWT ici
-                const jwtKey: string = process.env.JWT_SECRET || "your-secret-key";
-                const jwtExpire: string = process.env.JWT_EXPIRE || "24h";
-                const userId = (user as any)._id.toString();
-                const token = jwt.sign({ id: userId }, jwtKey, {
-                    expiresIn: jwtExpire,
-                } as jwt.SignOptions);
-                
-                // Response with user data
-                const userToSend = {
-                    id: userId,
-                    email: user.email,
-                    token: token,
-                    createdAt: user.createdAt,
-                    updatedAt: user.updatedAt
-                };
-                
-                res
-                    .set("Content-Type", "application/json; charset=utf-8")
-                    .status(200)
-                    .send(userToSend);
-            } else {
-                res.status(401).send({ message: "MDP incorrect" });
-            }
-        } else {
-            res.status(404).send({ message: "User inconnu" });
+        console.log("user trouvé:", user);
+        if (!user) {
+            return res.status(404).send({ message: "User inconnu" });
         }
+        if (await user.validPassword(password)) {
+            //JWT ici
+            const jwtKey: string = process.env.JWT_SECRET || "your-secret-key";
+            const jwtExpire: string = process.env.JWT_EXPIRE || "24h";
+            const userId = (user as any)._id;
+            const token = jwt.sign({ id: userId }, jwtKey, {
+                expiresIn: jwtExpire,
+            } as jwt.SignOptions);
+            
+            // Response = userData dans front
+            const userToSend = {
+                id: userId,
+                email: user.email,
+                token: token,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt
+            };
+            console.log('info du user à envoyer:', userToSend)
+            return res
+                .set("Content-Type", "application/json; charset=utf-8")
+                .status(200)
+                .send(userToSend);
+        } else {
+            return res.status(401).send({ message: "MDP incorrect" });
+        }
+       
     }
 
     public async signin(req: any, res: any) { 
@@ -89,6 +89,27 @@ export default class UserController {
             res.status(200).send(contacts);
         } catch (error) {
             res.status(500).send({ message: "Erreur lors de la récupération des contacts (erreur serveur)" });
+        }
+    }
+
+    public async getContactByContactId(req: any, res: any) {
+        try {
+            const contactId = req.params.contactId;
+            const userId = req.user.id;
+            
+            if (!contactId) {
+                return res.status(400).send({ message: "ContactId requis" });
+            }
+
+            const contact = await ContactModel.findOne({ _id: contactId, createdBy: userId, deletedAt: null });
+            if (!contact) {
+                return res.status(404).send({ message: "Contact non trouvé" });
+            }
+            
+            res.status(200).send(contact);
+        } catch (error) {
+            console.error('Error in getContactByContactId:', error);
+            res.status(500).send({ message: "Erreur lors de la récupération du contact" });
         }
     }
 

@@ -1,55 +1,98 @@
 import React, { useEffect, useState } from "react";
+import { deleteContact, getContactsByUserId } from "../actions/contacts";
+import { useNavigate } from "react-router-dom";
 
 type Contact = {
-    id: string;
+    _id: string;
     firstname: string;
-    prelastname: string;
-    telephone: string;
+    lastname: string;
+    phone: string;
 };
 
-const TableContact: React.FC = () => {
+interface TableContactProps {
+    userId: string;
+    dataContact?: Contact[];
+}
+
+const TableContact: React.FC<TableContactProps> = ({ userId, dataContact = [] }) => {
     const [contacts, setContacts] = useState<Contact[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchContacts = async () => {
+            setError(null);
             setLoading(true);
             try {
-                const response = await fetch(
-                    `/api/contacts`
-                );
-                if (!response.ok) throw new Error("Failed to fetch contacts");
-                const data = await response.json();
-                setContacts(data);
+                if (dataContact && dataContact.length > 0) {
+                    setContacts(dataContact);
+                } else {
+                    const data = await getContactsByUserId(userId);
+                    setContacts(data || []);
+                }
             } catch (error) {
+                setError(error instanceof Error ? error.message : 'Failed to fetch contacts');
+                if (error instanceof Error && error.message === 'Authentication required') {
+                    navigate('/auth');
+                }
                 setContacts([]);
             } finally {
                 setLoading(false);
             }
         };
-        fetchContacts();
-    }, []);
-
+        
+        if (userId) {
+            fetchContacts();
+        }
+    }, [userId, navigate, dataContact]);
+console.log(contacts);
     return (
-        <div>
-            <h2>Contacts</h2>
+        <div className="w-full">
+            <h2 className="text-xl font-bold mb-4">Contacts</h2>
             {loading ? (
-                <p>Chargement...</p>
+                <p>Chargement des contacts...</p>
+            ) : error ? (
+                <p className="text-red-500">{error}</p>
+            ) : contacts.length === 0 ? (
+                <p>Aucun contact trouvé</p>
             ) : (
-                <table>
-                    <thead>
+                <table className="w-full border-collapse border border-gray-300">
+                    <thead className="bg-gray-100">
                         <tr>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Téléphone</th>
+                            <th className="border border-gray-300 p-2">Prénom</th>
+                            <th className="border border-gray-300 p-2">Nom</th>
+                            <th className="border border-gray-300 p-2">Téléphone</th>
+                            <th className="border border-gray-300 p-2">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {contacts.map((contact) => (
-                            <tr key={contact.id}>
-                                <td>{contact.firstname}</td>
-                                <td>{contact.prelastname}</td>
-                                <td>{contact.telephone}</td>
+                            <tr key={contact._id} className="">
+                                <td className="border border-gray-300 p-2">{contact.firstname}</td>
+                                <td className="border border-gray-300 p-2">{contact.lastname}</td>
+                                <td className="border border-gray-300 p-2">{contact.phone}</td>
+                                <td className="border border-gray-300 p-2">
+                                    <button
+                                        onClick={() => navigate(`/${userId}/contacts/edit/${contact._id}`)}
+                                        className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                                    >
+                                        Modifier
+                                    </button>
+                                      <button
+                                        onClick={async () => {
+                                            try {
+                                                await deleteContact(contact._id);
+                                                setContacts(contacts.filter(c => c._id !== contact._id));
+                                            } catch (error) {
+                                                setError(error instanceof Error ? error.message : 'Failed to delete contact');
+                                            }
+                                        }}
+                                        className="bg-red-500 text-white px-2 py-1 rounded mr-2"
+                                    >
+                                        Supprimer
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>

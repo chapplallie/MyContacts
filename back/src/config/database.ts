@@ -29,7 +29,16 @@ export const connectDatabase = async (): Promise<void> => {
         const uri = getMongoURI();
         console.log("Connecting to MongoDB...");
         
-        await mongoose.connect(uri);
+        await mongoose.connect(uri, {
+            serverSelectionTimeoutMS: 30000, // Increased timeout
+            socketTimeoutMS: 45000,
+            connectTimeoutMS: 30000, // Increased timeout
+            maxPoolSize: 10,
+            minPoolSize: 2,
+            retryWrites: true,
+            retryReads: true,
+            authSource: 'admin'
+        });
         
         console.log("Connected to MongoDB successfully!");
         console.log(`Database: ${mongoose.connection.name}`);

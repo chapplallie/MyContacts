@@ -34,7 +34,7 @@ app.get('/health', (req, res) => {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // User route
-app.use('/', userRoute.router);
+app.use('/api', userRoute.router);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -53,7 +53,6 @@ const startServer = async () => {
         // Connect to MongoDB
         await connectDatabase();
         
-        // Start listening
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
             console.log(`API URL: http://localhost:${PORT}`);

@@ -1,8 +1,10 @@
 // @ts-ignore
-const API_URL = process.env.REACT_APP_API_URL as string;
+const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = `${baseUrl}/api`;
 
 export async function createUser(data:{email: string, password: string}) {
-    const response = await fetch(`${API_URL}/signin`, {
+  
+  const response = await fetch(`${API_URL}/signin`, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
@@ -11,12 +13,14 @@ export async function createUser(data:{email: string, password: string}) {
     });
   const dataToSend = await response.json(); 
   window.location.href = "/auth";
-  console.log("user created:", dataToSend);
   return dataToSend;
 
 }
 
 export async function authentUser(data: { email: string, password: string}) {
+    console.log("api url:", `${API_URL}/auth`);
+
+  //TODO 1: Bcrypt mdp avant envoie 
     const response = await fetch(`${API_URL}/auth`, {
         method: 'POST',
         headers: {
@@ -24,10 +28,15 @@ export async function authentUser(data: { email: string, password: string}) {
         },
         body: JSON.stringify(data),
     });
-
   const dataToSend = await response.json();
-  console.log("user:", dataToSend);
-  console.log("userId:", dataToSend.userId);
-  window.location.href = `/${dataToSend.userId}`;
+  
+  if (dataToSend.token) {
+    localStorage.setItem('token', dataToSend.token);
+    localStorage.setItem('userId', dataToSend.id);
+    localStorage.setItem('userEmail', data.email);
+    window.location.href = `/${dataToSend.id}/contacts`;
+  } else {
+    console.error('No token received from server');
+  }
   return dataToSend;
 }

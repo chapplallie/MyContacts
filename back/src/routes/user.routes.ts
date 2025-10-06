@@ -2,7 +2,6 @@ import { connect } from 'mongoose';
 import UserController from '../controllers/user.controller';
 import express from 'express';
 import connectedUser from '../middlewares/auth.middleware';
-import swaggerJSDoc from 'swagger-jsdoc';
 
 export default class UserRoute {
         public router = express.Router();
@@ -88,8 +87,35 @@ export default class UserRoute {
          *       500:
          *         description: Internal server error
          */
-        this.router.get('/contacts', connectedUser, this.userController.getContacts);
-             /**
+    this.router.get('/contacts', connectedUser, this.userController.getContacts);
+        /**
+         * @swagger
+         * /contacts/{contactId}:
+         *   get:
+         *     summary: Récupérer un contact par son ID
+         *     tags:
+         *       - Contacts
+         *     parameters:
+         *       - in: path
+         *         name: contactId
+         *         required: true
+         *         description: ID du contact à récupérer
+         *         schema:
+         *           type: string
+         *     responses:
+         *       200:
+         *         description: Contact récupéré avec succès
+         *         content:
+         *           application/json:
+         *             schema:
+         *               $ref: '#/components/schemas/Contact'
+         *       404:
+         *         description: Contact non trouvé
+         *       500:
+         *         description: Erreur serveur
+         */
+    this.router.get('/contacts/:contactId', connectedUser, this.userController.getContactByContactId);
+        /**
          * @swagger
          * /contacts:
          *   post:
@@ -116,8 +142,8 @@ export default class UserRoute {
          *       500:
          *         description: Internal server error
          */
-        this.router.post('/contacts/add', connectedUser, this.userController.createContact);
-             /**
+    this.router.post('/contacts/add', connectedUser, this.userController.createContact);
+         /**
          * @swagger
          * /contacts:
          *   patch:
@@ -144,8 +170,8 @@ export default class UserRoute {
          *       500:
          *         description: Internal server error
          */
-        this.router.patch('/contacts/:contactId', connectedUser, this.userController.updateContact);
-             /**
+    this.router.patch('/contacts/:contactId', connectedUser, this.userController.updateContact);
+         /**
          * @swagger
          * /contacts:
          *   delete:
@@ -166,7 +192,7 @@ export default class UserRoute {
          *       500:
          *         description: Internal server error
          */
-        this.router.delete('/contacts/:contactId', connectedUser, this.userController.deleteContact);
+    this.router.delete('/contacts/:contactId', connectedUser, this.userController.deleteContact);
 
     }
 }
