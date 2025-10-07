@@ -47,7 +47,7 @@ const TableContact: React.FC<TableContactProps> = ({ userId, dataContact = [] })
         }
     }, [userId, navigate, dataContact]);
     return (
-        <div className="w-full">
+        <div className="w-full mt-4">
             <h2 className="text-xl font-bold mb-4">Contacts</h2>
             {loading ? (
                 <p>Chargement des contacts...</p>
@@ -56,7 +56,7 @@ const TableContact: React.FC<TableContactProps> = ({ userId, dataContact = [] })
             ) : contacts.length === 0 ? (
                 <p>Aucun contact trouvé</p>
             ) : (
-                <table className="w-full border-collapse border border-gray-300">
+                <table className="w-400 mx-auto p-4 border-solid border border-gray-300">
                     <thead className="bg-gray-100">
                         <tr>
                             <th className="border border-gray-300 p-2">Prénom</th>

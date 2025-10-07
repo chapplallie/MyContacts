@@ -193,6 +193,5 @@ export default class UserRoute {
          *         description: Internal server error
          */
     this.router.delete('/contacts/:contactId', connectedUser, this.userController.deleteContact);
-
     }
 }

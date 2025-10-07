@@ -10,7 +10,7 @@ const UserPage: React.FC<UserPageProps> = ({ email }) => {
     const { userId } = useParams<{ userId: string }>();
     const [contacts, setContacts] = useState<any[]>([]);
     const navigate = useNavigate();
-    
+    const nameUser = email.split('@')[0];
     useEffect(() => {
         const fetchData = async () => {
             const token = localStorage.getItem('token');
@@ -45,15 +45,16 @@ const UserPage: React.FC<UserPageProps> = ({ email }) => {
         };
         
         fetchData();
+
     }, [userId, navigate]);
 
   return (
     <div>
-        <h1>Bienvenue sur la page de {email}</h1>
+        <h1>Bienvenue sur la page de {nameUser}</h1>
         <div className="w-full flex justify-between">
             <button onClick={() => window.location.href = `/${userId}/contacts/add`}>Ajouter un contact</button>
         </div>
-        <div>
+        <div className="w-200 mx-auto p-4">
             <TableContact dataContact={contacts} userId={userId || ''} />
         </div>
     </div>

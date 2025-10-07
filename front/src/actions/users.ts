@@ -32,6 +32,7 @@ export async function authentUser(data: { email: string, password: string}) {
     localStorage.setItem('token', dataToSend.token);
     localStorage.setItem('userId', dataToSend.id);
     localStorage.setItem('userEmail', data.email);
+    console.log(dataToSend);
     window.location.href = `/${dataToSend.id}/contacts`;
   } else {
     console.error('No token received from server');
