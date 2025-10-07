@@ -7,7 +7,7 @@ import { swaggerSpec, swaggerUi } from './swagger/swaggerConfig';
 
 dotenv.config();
 
-const app = express();
+export const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Initialize routes
