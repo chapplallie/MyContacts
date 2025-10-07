@@ -134,10 +134,15 @@ export default class UserController {
 
         const updatedContact = await ContactModel.findOneAndUpdate(
             { _id: contactId, createdBy: userId, deletedAt: null },
-            updateData
+            updateData,
+            { new: true }
         );
 
-        res.status(200).send({ message: "Contact mis à jour avec succès", contact: updatedContact });
+        if (!updatedContact) {
+            return res.status(404).send({ message: "Contact not found" });
+        }
+
+        res.status(200).send(updatedContact);
     }
 
     public async deleteContact(req: any, res: any) {
