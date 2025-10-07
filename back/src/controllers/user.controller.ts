@@ -12,7 +12,7 @@ export default class UserController {
         
         const user = await UserModel.findOne({ email: email });
         if (!user) {
-            return res.status(404).send({ message: "User inconnu" });
+            return res.status(401).send({ message: "User inconnu" });
         }
         if (await user.validPassword(password)) {
             //JWT ici
@@ -50,7 +50,7 @@ export default class UserController {
 
         const existingUser = await UserModel.findOne({ email: email });
         if (existingUser) {
-            res.status(409).send({ message: "Email déjà utilisé" });
+            res.status(401).send({ message: "Email déjà utilisé" });
             return;
         }
         
@@ -113,7 +113,6 @@ export default class UserController {
     //TODO 5 : renvoyer contact mis à jour direct (doc mongo ???)
     public async updateContact(req: any, res: any) {
         const contactId = req.params.contactId;
-
         const { firstname, lastname, phone } = req.body;
 
         if (!firstname && !lastname && !phone) {
